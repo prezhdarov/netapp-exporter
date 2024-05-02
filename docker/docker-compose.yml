@@ -1,0 +1,10 @@
+version: '2.1'
+services:
+  veeam-exporter:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+
+    ports:
+    - "9169:9169"
+
