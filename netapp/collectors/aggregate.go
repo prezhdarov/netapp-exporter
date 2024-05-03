@@ -81,7 +81,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_available"),
-					"Aggregate capacity in bytes",
+					"Aggregate available in bytes",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.Available,
@@ -92,7 +92,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_used"),
-					"Aggregate capacity in bytes",
+					"Aggregate used in bytes",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.Used,
@@ -103,7 +103,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_inactive"),
-					"Aggregate capacity in bytes",
+					"Aggregate inactive in bytes",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.InactiveData,
@@ -114,7 +114,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_physical_used"),
-					"Aggregate capacity in bytes",
+					"Aggregate physical capacity used in bytes",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.PhysicalUsed,
@@ -125,7 +125,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_used_with_snapreserve"),
-					"Aggregate capacity in bytes",
+					"Aggregate used with snapshot reserve in bytes",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.UsedWithSnapReserve,
@@ -136,7 +136,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_metadata"),
-					"Aggregate capacity in bytes",
+					"Aggregate metadata in bytes",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.Metadata,
@@ -147,7 +147,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_compact_count"),
-					"Aggregate capacity in bytes",
+					"Aggregate data compaction count in whoknows",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.DataCompactCount,
@@ -158,10 +158,32 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_compact_saved"),
-					"Aggregate capacity in bytes",
+					"Aggregate data compaction saved in bytes",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Space.Block.DataCompactSaved,
+			),
+		)
+
+		ch <- prometheus.NewMetricWithTimestamp(
+			timestamp, prometheus.MustNewConstMetric(
+				prometheus.NewDesc(
+					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_dedupe_shared_count"),
+					"Aggregate data deduplication count in whoknows",
+					nil, labels,
+				),
+				prometheus.GaugeValue, aggregate.Space.Block.VolDedupeSharedCount,
+			),
+		)
+
+		ch <- prometheus.NewMetricWithTimestamp(
+			timestamp, prometheus.MustNewConstMetric(
+				prometheus.NewDesc(
+					prometheus.BuildFQName(namespace, aggregateSubsystem, "block_dedupe_saved"),
+					"Aggregate data deduplication saved in bytes",
+					nil, labels,
+				),
+				prometheus.GaugeValue, aggregate.Space.Block.VolDedupeSaved,
 			),
 		)
 
@@ -170,7 +192,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "throughput_read"),
-					"Aggregate capacity in bytes",
+					"Aggregate read throughput in bytes/s or...",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.Throughput.Read,
@@ -181,7 +203,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "throughput_write"),
-					"Aggregate capacity in bytes",
+					"Aggregate write throughput in bytes/s or..",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.Throughput.Write,
@@ -192,7 +214,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "throughput_other"),
-					"Aggregate capacity in bytes",
+					"Aggregate other throughput in bytes/s or..",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.Throughput.Other,
@@ -203,7 +225,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "latency_read"),
-					"Aggregate capacity in bytes",
+					"Aggregate read latency in ms",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.Latency.Read,
@@ -214,7 +236,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "latency_write"),
-					"Aggregate capacity in bytes",
+					"Aggregate write latency in ms",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.Latency.Write,
@@ -225,7 +247,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "latency_other"),
-					"Aggregate capacity in bytes",
+					"Aggregate other latency in ms",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.Latency.Other,
@@ -236,7 +258,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "iops_read"),
-					"Aggregate capacity in bytes",
+					"Aggregate read iops",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.IOps.Read,
@@ -247,7 +269,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "iops_write"),
-					"Aggregate capacity in bytes",
+					"Aggregate write iops",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.IOps.Write,
@@ -258,7 +280,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			timestamp, prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, aggregateSubsystem, "iops_other"),
-					"Aggregate capacity in bytes",
+					"Aggregate other iops",
 					nil, labels,
 				),
 				prometheus.GaugeValue, aggregate.Metric.IOps.Other,
