@@ -64,7 +64,7 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 			level.Error(c.logger).Log("Timestamp convertion failed:", err)
 		}
 
-		labels := map[string]string{"aggregate": aggregate.Name, "node": aggregate.Node.Name}
+		labels := map[string]string{"aggregate": aggregate.Name, "na_node": aggregate.Node.Name, "na_cluster": loginData["target"].(string)}
 
 		ch <- prometheus.NewMetricWithTimestamp(
 			timestamp, prometheus.MustNewConstMetric(
