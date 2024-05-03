@@ -1,5 +1,6 @@
 package ontapCollectors
 
+/*
 import (
 	"encoding/json"
 	"flag"
@@ -17,7 +18,7 @@ const (
 	nodeSubsystem = "node"
 )
 
-var nodeCollectorFlag = flag.Bool("node.collector", collector.DefaultEnabled, fmt.Sprintf("Enable the %s collector (default: %v)", nodeSubsystem, collector.DefaultEnabled))
+var nodeCollectorFlag = flag.Bool(fmt.Sprintf("collector.%s", nodeSubsystem), collector.DefaultEnabled, fmt.Sprintf("Enable the %s collector (default: %v)", nodeSubsystem, collector.DefaultEnabled))
 
 type nodeCollector struct {
 	logger log.Logger
@@ -44,7 +45,7 @@ func (c *nodeCollector) Update(ch chan<- prometheus.Metric, namespace string, cl
 	for node := range loginData["nodes"].(map[string]string) {
 
 		go func(node string) {
-			updateNode(ch, node, namespace, clientAPI, loginData, params, errchan)
+			updateNode(ch, node, namespace, clientAPI, loginData, params, errchan, c.logger)
 			wg.Done()
 		}(node)
 
@@ -65,7 +66,7 @@ func (c *nodeCollector) Update(ch chan<- prometheus.Metric, namespace string, cl
 
 }
 
-func updateNode(ch chan<- prometheus.Metric, node, namespace string, clientAPI collector.ClientAPI, loginData map[string]interface{}, params map[string]string, errorchan chan<- error) error {
+func updateNode(ch chan<- prometheus.Metric, node, namespace string, clientAPI collector.ClientAPI, loginData map[string]interface{}, params map[string]string, errorchan chan<- error, logger log.Logger) error {
 
 	type metricResponse struct {
 		Timestamp string  `json:"timestamp"`
@@ -129,7 +130,7 @@ func updateNode(ch chan<- prometheus.Metric, node, namespace string, clientAPI c
 	extraConfig := make(map[string]interface{}, 0)
 
 	extraConfig["api"] = fmt.Sprintf("/api/cluster/nodes/%s?fields=model,version,uptime,state,membership,storage_configuration,controller,service_processor,nvram,metric", node)
-	body, err := clientAPI.Get(loginData, extraConfig)
+	body, err := clientAPI.Get(loginData, extraConfig, logger)
 	if err != nil {
 		return err
 	}
@@ -239,3 +240,4 @@ func updateNode(ch chan<- prometheus.Metric, node, namespace string, clientAPI c
 
 	return nil
 }
+*/

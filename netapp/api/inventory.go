@@ -1,8 +1,13 @@
 package ontapi
 
-import "encoding/json"
+/*
+import (
+	"encoding/json"
 
-func (na *ONTAP) listNodes(loginData map[string]interface{}) (map[string]string, error) {
+	"github.com/go-kit/log"
+)
+
+func (na *ONTAP) listNodes(loginData map[string]interface{}, logger log.Logger) (map[string]string, error) {
 
 	type nodeInventory struct {
 		UUID string `json:"uuid"`
@@ -20,7 +25,7 @@ func (na *ONTAP) listNodes(loginData map[string]interface{}) (map[string]string,
 	extraConfig := make(map[string]interface{}, 0)
 
 	extraConfig["api"] = "/api/cluster/nodes"
-	body, err := na.Get(loginData, extraConfig)
+	body, err := na.Get(loginData, extraConfig, logger)
 	if err != nil {
 		return nil, err
 	}
@@ -36,3 +41,4 @@ func (na *ONTAP) listNodes(loginData map[string]interface{}) (map[string]string,
 
 	return nodes, nil
 }
+*/

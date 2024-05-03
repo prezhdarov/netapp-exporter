@@ -8,7 +8,7 @@ ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
-    GOAMD64=v3 
+    GOAMD64=v2 
 
 ADD . /build
 WORKDIR /build
@@ -20,4 +20,4 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /build/netapp-exporter /bin/netapp-exporter
 
-ENTRYPOINT [ "/bin/veeam-exporter" ]
+ENTRYPOINT [ "/bin/netapp-exporter" ]

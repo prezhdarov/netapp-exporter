@@ -18,7 +18,7 @@ import (
 
 const (
 	exporterName = "NetApp ONTAP REST API Exporter"
-	namespace    = "ontap"
+	namespace    = "netapp"
 )
 
 var (
@@ -33,7 +33,7 @@ var (
 
 func usage() {
 	const s = `
-netapp-exporter collects metrics data from Veeam Enterprise Manager. 
+netapp-exporter collects metrics data from NetApp ONTAP Cluster. 
 `
 	config.Usage(s)
 }
