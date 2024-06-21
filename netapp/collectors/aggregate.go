@@ -18,7 +18,6 @@ const (
 	//maxRecords         int    = 30
 	expensiveRecords string = "space.block_storage.*,metric,home_node.name"
 	timeout          int    = 10
-	timeFormat       string = "2006-01-02T15:04:05Z"
 )
 
 var aggregateCollectorFlag = flag.Bool(fmt.Sprintf("collector.%s", aggregateSubsystem), collector.DefaultEnabled, fmt.Sprintf("Enable the %s collector (default: %v)", aggregateSubsystem, collector.DefaultEnabled))

@@ -32,27 +32,41 @@ type Aggregate struct {
 			//FullThresholdPct     float64 `json:"full_threshold_percent"`
 		} `json:"block_storage"`
 	} `json:"space"`
-	Metric struct {
-		Timestamp  string `json:"timestamp"`
-		Duration   string `json:"duration"`
-		Status     string `json:"status"`
-		Throughput struct {
-			Read  float64 `json:"read"`
-			Write float64 `json:"write"`
-			Other float64 `json:"other"`
-			//Total float64 `json:"total"`
-		} `json:"throughput"`
-		Latency struct {
-			Read  float64 `json:"read"`
-			Write float64 `json:"write"`
-			Other float64 `json:"other"`
-			//Total float64 `json:"total"`
-		} `json:"latency"`
-		IOps struct {
-			Read  float64 `json:"read"`
-			Write float64 `json:"write"`
-			Other float64 `json:"other"`
-			//Total float64 `json:"total"`
-		} `json:"iops"`
-	} `json:"metric"`
+	Metric `json:"metric"`
+}
+
+type Cluster struct {
+	Version `json:"version"`
+	Metric  `json:"metric"`
+}
+
+type Version struct {
+	Full       string `json:"full"`
+	Generation int    `json:"generation"`
+	Major      int    `json:"major"`
+	Minor      int    `json:"minor"`
+}
+
+type Metric struct {
+	Timestamp  string `json:"timestamp"`
+	Duration   string `json:"duration"`
+	Status     string `json:"status"`
+	Throughput struct {
+		Read  float64 `json:"read"`
+		Write float64 `json:"write"`
+		Other float64 `json:"other"`
+		//Total float64 `json:"total"`
+	} `json:"throughput"`
+	Latency struct {
+		Read  float64 `json:"read"`
+		Write float64 `json:"write"`
+		Other float64 `json:"other"`
+		//Total float64 `json:"total"`
+	} `json:"latency"`
+	IOps struct {
+		Read  float64 `json:"read"`
+		Write float64 `json:"write"`
+		Other float64 `json:"other"`
+		//Total float64 `json:"total"`
+	} `json:"iops"`
 }
