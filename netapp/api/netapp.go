@@ -5,14 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log/slog"
 	"time"
 
 	"net/http"
 
 	"github.com/prezhdarov/prometheus-exporter/collector"
-
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 )
 
 var (
@@ -39,13 +37,13 @@ func NewAPI() *ONTAP {
 	return &ONTAP{}
 }
 
-func Load(logger log.Logger) {
+func Load(logger *slog.Logger) {
 
-	level.Info(logger).Log("msg", "Loading ONTAP REST API")
+	logger.Info("msg", "Loading ONTAP REST API", nil)
 
 }
 
-func (na *ONTAP) Login(target string, logger log.Logger) (map[string]interface{}, error) {
+func (na *ONTAP) Login(target string, logger *slog.Logger) (map[string]interface{}, error) {
 
 	loginData := make(map[string]interface{}, 0)
 
@@ -63,13 +61,13 @@ func (na *ONTAP) Login(target string, logger log.Logger) (map[string]interface{}
 }
 
 // NetApp ONTAP REST API doesn't believe in sessions and suchlike therefore there isn't much that can be done to logout.... doing what we can, aren't we :D
-func (na *ONTAP) Logout(loginData map[string]interface{}, logger log.Logger) error {
+func (na *ONTAP) Logout(loginData map[string]interface{}, logger *slog.Logger) error {
 
 	return nil
 
 }
 
-func (na *ONTAP) Get(loginData, extraConfig map[string]interface{}, logger log.Logger) (interface{}, error) {
+func (na *ONTAP) Get(loginData, extraConfig map[string]interface{}, logger *slog.Logger) (interface{}, error) {
 
 	url := fmt.Sprintf("%s://%s%s", *naSchema, loginData["target"], extraConfig["api"])
 

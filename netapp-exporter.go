@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -11,8 +12,7 @@ import (
 	ONTAPI "netapp-exporter/netapp/api"
 	ontapCollectors "netapp-exporter/netapp/collectors"
 
-	"github.com/go-kit/log/level"
-	"github.com/prometheus/common/promlog"
+	"github.com/prometheus/common/promslog"
 	"github.com/prometheus/exporter-toolkit/web"
 )
 
@@ -44,9 +44,9 @@ func main() {
 	flag.Usage = usage
 	config.Parse()
 
-	logger := promlog.New(config.SetLogger(logFormat, logLevel))
+	logger := promslog.New(config.SetLogger(logFormat, logLevel))
 
-	level.Debug(logger).Log("exporter target is", disableExporterTarget)
+	logger.Debug("exporter target is", fmt.Sprintf("%v", *disableExporterTarget), nil)
 
 	ONTAPI.Load(logger)
 
@@ -67,12 +67,12 @@ func main() {
 			</html>`))
 	})
 
-	level.Info(logger).Log("msg", "listening on", "address", listenAddress)
+	logger.Info("msg", "listening on", "address", *listenAddress, nil)
 
 	server := &http.Server{}
 
 	if err := web.ListenAndServe(server, config.WebConfig(listenAddress), logger); err != nil {
-		level.Error(logger).Log("err", err)
+		logger.Error("err", fmt.Sprintf("%s", err), nil)
 		os.Exit(1)
 	}
 
