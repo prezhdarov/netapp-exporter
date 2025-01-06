@@ -4,10 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"time"
-
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
+	"log/slog"
 
 	"github.com/prezhdarov/prometheus-exporter/collector"
 	"github.com/prometheus/client_golang/prometheus"
@@ -23,7 +20,7 @@ const (
 var aggregateCollectorFlag = flag.Bool(fmt.Sprintf("collector.%s", aggregateSubsystem), collector.DefaultEnabled, fmt.Sprintf("Enable the %s collector (default: %v)", aggregateSubsystem, collector.DefaultEnabled))
 
 type aggregateCollector struct {
-	logger log.Logger
+	logger *slog.Logger
 }
 
 func init() {
@@ -31,7 +28,7 @@ func init() {
 }
 
 // NewMeminfoCollector returns a new Collector exposing memory stats.
-func NewAggregateCollector(logger log.Logger) (collector.Collector, error) {
+func NewAggregateCollector(logger *slog.Logger) (collector.Collector, error) {
 	return &aggregateCollector{logger}, nil
 }
 
@@ -46,22 +43,19 @@ func (c *aggregateCollector) Update(ch chan<- prometheus.Metric, namespace strin
 	body, err := clientAPI.Get(loginData, extraConfig, c.logger)
 
 	if err != nil {
-		level.Error(c.logger).Log("Error:", err)
+		c.logger.Error("Error:", fmt.Sprintf("%s", err), nil)
 		return err
 	}
 
 	err = json.Unmarshal(*body.(*[]byte), &aggregates)
 	if err != nil {
-		level.Error(c.logger).Log("Error:", err)
+		c.logger.Error("Error:", fmt.Sprintf("%s", err), nil)
 		return err
 	}
 
 	for _, aggregate := range aggregates.Records {
 
-		timestamp, err := time.Parse(timeFormat, aggregate.Metric.Timestamp)
-		if err != nil {
-			level.Error(c.logger).Log("Timestamp convertion failed:", err)
-		}
+		timestamp := aggregate.Metric.ToTimestamp(c.logger)
 
 		labels := map[string]string{"aggregate": aggregate.Name, "na_node": aggregate.Node.Name, "na_cluster": loginData["target"].(string)}
 
