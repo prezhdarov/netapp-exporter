@@ -1,8 +1,7 @@
 package ontapCollectors
 
 import (
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
+	"log/slog"
 )
 
 /*
@@ -32,8 +31,8 @@ var (
 		//Total float64 `json:"total"`
 	}
 */
-func Load(logger log.Logger) {
-	level.Info(logger).Log("msg", "Loading NetApp ONTAP collector set")
+func Load(logger *slog.Logger) {
+	logger.Info("msg", "Loading NetApp ONTAP collector set", nil)
 }
 
 /*
